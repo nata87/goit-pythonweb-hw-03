@@ -7,11 +7,12 @@ import json
 import mimetypes
 
 BASE_DIR = Path(__file__).parent
-TEMPLATES_DIR = BASE_DIR / "templates"  # якщо шаблони в підпапці
+TEMPLATES_DIR = BASE_DIR / "templates" 
 STORAGE_DIR = BASE_DIR / "storage"
 DATA_FILE = STORAGE_DIR / "data.json"
 
-env = Environment(loader=FileSystemLoader("."))
+env = Environment(loader=FileSystemLoader(BASE_DIR / "templates"))
+
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -49,8 +50,9 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.send_response(status)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
-        with open(BASE_DIR / filename, 'rb') as f:
+        with open(TEMPLATES_DIR / filename, 'rb') as f:
             self.wfile.write(f.read())
+
 
     def send_static(self, filepath):
         self.send_response(200)
